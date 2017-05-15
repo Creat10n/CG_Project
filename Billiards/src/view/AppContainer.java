@@ -17,6 +17,7 @@ public class AppContainer extends JFrame {
     private static AppContainer mainFrame;
 
     private AppContainer() {
+        super("Carrom Billiards");
         mainFrame = this;
         setResizable(false);
         currentPanel = new JPanel();
@@ -31,6 +32,13 @@ public class AppContainer extends JFrame {
         changePanel(initial);
     }
 
+    public static AppContainer getInstance() {
+        if (mainFrame == null) {
+            mainFrame = new AppContainer();
+        }
+        return mainFrame;
+    }
+
     public static void changePanel(JPanel newPanel) {
         if (mainFrame == null) {
             mainFrame = new AppContainer();
@@ -42,6 +50,6 @@ public class AppContainer extends JFrame {
     }
 
     public static void main(String[] args) {
-        new AppContainer(new MainMenuPanel());
+        new AppContainer(new MenuView());
     }
 }

@@ -16,25 +16,37 @@ import javax.swing.LayoutStyle.*;
  *
  * @author CREAT10N
  */
-public class MainMenuPanel extends JPanel {
+public class MenuView extends JPanel {
 
+    // "Carrom" label
     private JLabel jLabel;
+    
+    // "New Game" button
     private JButton jButton1;
+    
+    // "High Score" button
     private JButton jButton2;
+    
+    // "Help" button
     private JButton jButton3;
+    
+    // "Exit" button
     private JButton jButton4;
 
-    public MainMenuPanel() {
+    public MenuView() {
         initComponents();
+        // Add background
         add(ImageController.getBackgroundLabel());
     }
 
     private void initComponents() {
+        // Title
         jLabel = new JLabel("Carrom");
         jLabel.setFont(new Font("Lucida Calligraphy", 3, 36));
         jLabel.setForeground(new Color(255, 204, 51));
 
         jButton1 = new JButton("New Game");
+        // Go to LoginView
         jButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -43,6 +55,7 @@ public class MainMenuPanel extends JPanel {
         });
 
         jButton2 = new JButton("High Score");
+        // Go to HighScoresView
         jButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,6 +64,7 @@ public class MainMenuPanel extends JPanel {
         });
 
         jButton3 = new JButton("Help");
+        // Go to HelpView
         jButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,6 +73,7 @@ public class MainMenuPanel extends JPanel {
         });
 
         jButton4 = new JButton("Exit");
+        // Exit program
         jButton4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,6 +81,7 @@ public class MainMenuPanel extends JPanel {
             }
         });
 
+        // Layout
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(

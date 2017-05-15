@@ -31,11 +31,11 @@ public class HelpView extends JPanel {
 
     private void initComponents() {
         jButton = new JButton("Back");
-        // Return to MainMenu 
+        // Return to MenuView 
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppContainer.changePanel(new MainMenuPanel());
+                AppContainer.changePanel(new MenuView());
             }
         });
 

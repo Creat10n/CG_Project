@@ -13,11 +13,9 @@ public class Player {
 
     private static String name;
     private int score;
-    private boolean turn;
 
     public Player(String name) {
         Player.name = name;
-        turn = false;
     }
 
     /**
@@ -28,10 +26,10 @@ public class Player {
     }
 
     /**
-     * @param aName the name to set
+     * @param name the name to set
      */
-    public static void setName(String aName) {
-        name = aName;
+    public static void setName(String name) {
+        Player.name = name;
     }
 
     /**
@@ -46,19 +44,5 @@ public class Player {
      */
     public void setScore(int score) {
         this.score = score;
-    }
-
-    /**
-     * @return the turn
-     */
-    public boolean isTurn() {
-        return turn;
-    }
-
-    /**
-     * @param turn the turn to set
-     */
-    public void setTurn(boolean turn) {
-        this.turn = turn;
-    }    
+    }  
 }
