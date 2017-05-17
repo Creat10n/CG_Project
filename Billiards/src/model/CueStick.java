@@ -20,15 +20,18 @@ public class CueStick {
     private Graphics2D g;
     public ImageIcon stickIcon;
 
-    public CueStick(int x, int y) {
+    public CueStick() {
         stickIcon = new ImageIcon("src/images/stick.png");
-        this.x = x;
-        this.y = y;
+        // Position of the cue ball 
+        // The cue stick will rotate around this point
+        x = (int) GameView.balls.get(0).getX() + 10;
+        y = (int) GameView.balls.get(0).getY() + 10;
         radian = 0;
         WIDTH = stickIcon.getIconWidth();
         HEIGHT = stickIcon.getIconHeight();
-        a = GameView.balls.get(0).getX() - WIDTH;
-        b = GameView.balls.get(0).getY() + HEIGHT / 2;
+        // Position to draw the cue stick
+        a = (int) GameView.balls.get(0).getX() - WIDTH;
+        b = (int) GameView.balls.get(0).getY() + HEIGHT / 2;
     }
 
     public void paint(Graphics g) {
@@ -38,24 +41,19 @@ public class CueStick {
     }
 
     public void getRadian(double mouseX, double mouseY) {
-        double tan, deltaHeight, angle;
+        double tan, angle;
         boolean isTurned = false;
+        double delta = x + WIDTH - mouseX;
 
-        if ((x + WIDTH - mouseX) > 0) {
-            deltaHeight = x + WIDTH - mouseX;
-            a = GameView.balls.get(0).getX() - WIDTH;
-            b = GameView.balls.get(0).getY() + HEIGHT / 2;
-        } else {
-            a = GameView.balls.get(0).getX() - WIDTH;
-            b = GameView.balls.get(0).getY() + HEIGHT / 2;
+        // Check if the mouse position is on the right of the cue ball
+        if ((x + WIDTH - mouseX) <= 0) {
             isTurned = true;
-            deltaHeight = x + WIDTH - mouseX;
         }
 
         if (mouseY == y) {
             tan = 0;
         } else {
-            tan = (mouseY - y - HEIGHT) / deltaHeight;
+            tan = (mouseY - (y + HEIGHT)) / delta;
         }
 
         if (!isTurned) {
@@ -64,8 +62,11 @@ public class CueStick {
             angle = Math.atan(tan) + Math.PI;
         }
 
-        x = GameView.balls.get(0).getX() + 10;
-        y = GameView.balls.get(0).getY() + 10;
+        // Set new postion of cue ball and cue stick
+        a = (int) GameView.balls.get(0).getX() - WIDTH;
+        b = (int) GameView.balls.get(0).getY() + HEIGHT / 2;
+        x = (int) GameView.balls.get(0).getX() + 10;
+        y = (int) GameView.balls.get(0).getY() + 10;
         radian = angle;
     }
 }

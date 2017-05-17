@@ -14,23 +14,21 @@ import javax.swing.*;
  */
 public class Ball {
 
-    private int x, y;
+    private double x, y;
     private final static int SIZE = 20;
-    private double vx, vy, cx, cy;
+    private double vx, vy;
     private ImageIcon ballIcon;
     private boolean collide;
 
     public Ball(int x, int y, int type) {
         setPoint(x, y);
-        cx = x;
-        cy = y;
         vx = 0;
         vy = 0;
         setType(type);
         collide = false;
     }
 
-    public void setPoint(int x, int y) {
+    public void setPoint(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -40,91 +38,63 @@ public class Ball {
     }
 
     public void paint(Graphics g) {
-        g.drawImage(getType().getImage(), getX(), getY(), SIZE, SIZE, null);
+        g.drawImage(getType().getImage(), (int)getX(), (int)getY(), SIZE, SIZE, null);
     }
 
     /**
      * @return the x
      */
-    public int getX() {
+    public double getX() {
         return x;
     }
 
     /**
      * @param x the x to set
      */
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
     /**
      * @return the y
      */
-    public int getY() {
+    public double getY() {
         return y;
     }
 
     /**
      * @param y the y to set
      */
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
     /**
-     * @return the vx
+     * @return the horizontal velocity
      */
     public double getVx() {
         return vx;
     }
 
     /**
-     * @param vx the vx to set
+     * @param vx the horizontal velocity to set
      */
     public void setVx(double vx) {
         this.vx = vx;
     }
 
     /**
-     * @return the vy
+     * @return the vertical velocity
      */
     public double getVy() {
         return vy;
     }
 
     /**
-     * @param vy the vy to set
+     * @param vy the vertical velocity to set
      */
     public void setVy(double vy) {
         this.vy = vy;
-    }
-
-    /**
-     * @return the cx
-     */
-    public double getCx() {
-        return cx;
-    }
-
-    /**
-     * @param cx the cx to set
-     */
-    public void setCx(double cx) {
-        this.cx = cx;
-    }
-
-    /**
-     * @return the cy
-     */
-    public double getCy() {
-        return cy;
-    }
-
-    /**
-     * @param cy the cy to set
-     */
-    public void setCy(double cy) {
-        this.cy = cy;
     }
 
     /**

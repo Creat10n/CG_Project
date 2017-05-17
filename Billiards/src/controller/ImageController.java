@@ -31,7 +31,7 @@ public class ImageController {
     }
 
     public static Image getTableImage() {
-        return new ImageIcon("src/images/table.jpg").getImage();
+        return new ImageIcon("src/images/table.png").getImage();
     }
 
     public static JLabel getTableLabel() {

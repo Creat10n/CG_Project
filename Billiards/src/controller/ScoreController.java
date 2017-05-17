@@ -7,6 +7,7 @@ package controller;
 
 import java.sql.*;
 import java.util.*;
+import model.*;
 
 /**
  *
@@ -18,6 +19,17 @@ public class ScoreController {
     public static ArrayList<String> names;
 
     public ScoreController() {
+    }
+
+    public static void saveScore(Player p) {
+        Connection con = DatabaseController.getConnection();
+        String query = "INSERT INTO highscore VALUES ('" + p.getName() + "', " + p.getScore() + ")";
+        try {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void highScores() {

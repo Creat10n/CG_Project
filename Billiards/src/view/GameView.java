@@ -8,7 +8,7 @@ package view;
 import controller.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.*;
 import model.*;
@@ -31,6 +31,10 @@ public class GameView extends JPanel {
     private JLabel jLabel4;
     // Playername label
     private JLabel jLabel5;
+    // "Time" label
+    private JLabel jLabel6;
+    // countdown label
+    private JLabel jLabel7;
 
     // Physics Controller
     private PhysicsController physicsController;
@@ -59,8 +63,12 @@ public class GameView extends JPanel {
     // Score points
     private int score;
 
-    // Timer
-    public static Timer timer;
+    // Animation timer 
+    public javax.swing.Timer timer;
+
+    // Countdown timer
+    public java.util.Timer countdown;
+    public int interval = 120;
 
     public GameView(String playerName) {
         // Set window size
@@ -95,7 +103,7 @@ public class GameView extends JPanel {
         balls.add(b3);
 
         // Setup cue stick
-        stick = new CueStick(START_X, START_Y);
+        stick = new CueStick();
 
         // Handling physics and input events
         physicsController = PhysicsController.getInstance();
@@ -103,7 +111,7 @@ public class GameView extends JPanel {
         addMouseListener(new MouseActionListener());
 
         // Setup timer
-        timer = new Timer(1, new TimeListener());
+        timer = new javax.swing.Timer(5, new TimeListener());
         timer.start();
     }
 
@@ -117,16 +125,15 @@ public class GameView extends JPanel {
         stick.paint(g);
     }
 
-    private void initComponents(String playerName) {
+    // Decrease interval by 1 for each second
+    private int setInterval() {
+        if (interval == 1) {
+            countdown.cancel();
+        }
+        return --interval;
+    }
 
-        jButton = new JButton("Main Menu");
-        // Go to MenuView
-        jButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AppContainer.changePanel(new MenuView());
-            }
-        });
+    private void initComponents(String playerName) {
 
         // Setup labels for name, score, power and checkdown timer
         jLabel1 = new JLabel("Name:");
@@ -144,6 +151,30 @@ public class GameView extends JPanel {
         jLabel5 = new JLabel(playerName);
         jLabel5.setFont(new Font("Times New Roman", 3, 16));
 
+        jLabel6 = new JLabel("Time:");
+        jLabel6.setFont(new Font("Times New Roman", 3, 16));
+
+        jLabel7 = new JLabel("120");
+        jLabel7.setFont(new Font("Times New Roman", 3, 16));
+
+        countdown = new java.util.Timer();
+        countdown.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                jLabel7.setText("" + setInterval());
+                if (interval == 0) {
+                    for (Ball b : GameView.balls) {
+                        b.setVx(0);
+                        b.setVy(0);
+                    }
+                    JOptionPane.showMessageDialog(null, "Game Over\nThank you for playing!");
+                    p.setScore(score);
+//                    ScoreController.saveScore(p);
+                    AppContainer.changePanel(new HighScoresView());
+                }
+            }
+        }, 1000, 1000);
+
         // Setup power bar
         powerBar = new JProgressBar();
 
@@ -155,7 +186,7 @@ public class GameView extends JPanel {
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(11, 11, 11)
+                                                .addGap(15, 15, 15)
                                                 .addComponent(jLabel3)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(powerBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -164,14 +195,20 @@ public class GameView extends JPanel {
                                                 .addGroup(layout.createParallelGroup(Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jLabel1)
-                                                                .addGap(18, 18, 18)
+                                                                .addGap(20, 20, 20)
                                                                 .addComponent(jLabel5)))
                                                 .addGap(35, 35, 35)
                                                 .addGroup(layout.createParallelGroup(Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jLabel2)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(jLabel4)))))
+                                                                .addGap(20, 20, 20)
+                                                                .addComponent(jLabel4)))
+                                                .addGap(125, 125, 125)
+                                                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(jLabel6)
+                                                                .addGap(20, 20, 20)
+                                                                .addComponent(jLabel7)))))
                                 .addContainerGap(125, Short.MAX_VALUE))
         );
 
@@ -187,13 +224,18 @@ public class GameView extends JPanel {
                                         .addComponent(jLabel1)
                                         .addComponent(jLabel5)
                                         .addComponent(jLabel2)
-                                        .addComponent(jLabel4))
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel7))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addContainerGap())
         );
+
     }
 
     private class TimeListener implements ActionListener {
+
+        private int oldScore = score;
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -208,30 +250,40 @@ public class GameView extends JPanel {
                 power = 0;
             }
 
-            if (check == 30) {
+            if (check == 35) {
                 physicsController.decreaseVelocity(GameView.balls);
                 check = 0;
             }
 
-            try {
-                for (Ball b : GameView.balls) {
-                    // Control balls movements
-                    physicsController.moveBall(b);
+            for (Ball b : GameView.balls) {
+                // Control balls movements
+                physicsController.moveBall(b);
 
-                    // Calculate score and display
-                    if (PhysicsController.isScore) {
-                        score++;
-                        jLabel4.setText(score + "");
-                    }
-
-                    // Reset first and second touch for calculating score in next strike
-                    if (b.getVx() == 0 && b.getVy() == 0) {
-                        PhysicsController.first = 0;
-                        PhysicsController.second = 0;
-                    }
+                // Calculate score and display
+                if (physicsController.calculateScore()) {
+                    score++;
+                    jLabel4.setText(score + "");
                 }
-            } catch (Exception ex) {
+
+                // Check to increase score by 1 point at most for each round
+                if (((oldScore + 1) == score)
+                        && ((balls.get(0).getVx() != 0 || balls.get(0).getVy() != 0)
+                        || (balls.get(1).getVx() != 0 || balls.get(1).getVy() != 0)
+                        || (balls.get(2).getVx() != 0 || balls.get(2).getVy() != 0))) {
+                    // Reset first and second touch for calculating score in next strike
+                    PhysicsController.first = false;
+                    PhysicsController.second = false;
+                }
+                if ((balls.get(0).getVx() == 0 && balls.get(0).getVy() == 0)
+                        && (balls.get(1).getVx() == 0 && balls.get(1).getVy() == 0)
+                        && (balls.get(2).getVx() == 0 && balls.get(2).getVy() == 0)) {
+                    oldScore = score;
+                    // Reset first and second touch for calculating score in next strike
+                    PhysicsController.first = false;
+                    PhysicsController.second = false;
+                }
             }
+
             if (isMax) {
                 powerBar.setValue(power);
             }
@@ -268,8 +320,8 @@ public class GameView extends JPanel {
             // Calculate x_velocity and y_velocity of the cue ball
             if (isMax) {
                 double vx, vy;
-                vx = Math.sin(stick.radian + Math.PI / 2) * powerBar.getPercentComplete() * 10;
-                vy = Math.cos(stick.radian + Math.PI / 2) * powerBar.getPercentComplete() * 10;
+                vx = Math.cos(-stick.radian) * powerBar.getPercentComplete() * 10;
+                vy = Math.sin(-stick.radian) * powerBar.getPercentComplete() * 10;
                 b1.setVx(vx);
                 b1.setVy(vy);
 
