@@ -11,25 +11,25 @@ package model;
  */
 public class Player {
 
-    private static String name;
+    private String name;
     private int score;
 
     public Player(String name) {
-        Player.name = name;
+        this.name = name;
     }
 
     /**
      * @return the name
      */
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
     /**
      * @param name the name to set
      */
-    public static void setName(String name) {
-        Player.name = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -44,5 +44,5 @@ public class Player {
      */
     public void setScore(int score) {
         this.score = score;
-    }  
+    }
 }

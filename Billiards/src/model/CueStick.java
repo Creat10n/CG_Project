@@ -15,7 +15,8 @@ import view.GameView;
  */
 public class CueStick {
 
-    private int x, y, WIDTH, HEIGHT, a, b;
+    private final int WIDTH, HEIGHT;
+    private int x, y, a, b;
     public double radian;
     private Graphics2D g;
     public ImageIcon stickIcon;

@@ -19,8 +19,7 @@ public class DatabaseController {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/carrom", "root", "1234");
-
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/carrom", "cgAdmin", "billiards");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -19,8 +19,6 @@ import model.*;
  */
 public class GameView extends JPanel {
 
-    // "MainMenu" button
-    private JButton jButton;
     // "Name" label
     private JLabel jLabel1;
     // "Score" label 
@@ -48,7 +46,7 @@ public class GameView extends JPanel {
     private CueStick stick;
 
     // Power bar for indicating power
-    public JProgressBar powerBar;
+    private JProgressBar powerBar;
     private int power;
 
     // Power level max or not
@@ -64,11 +62,11 @@ public class GameView extends JPanel {
     private int score;
 
     // Animation timer 
-    public javax.swing.Timer timer;
+    private javax.swing.Timer timer;
 
     // Countdown timer
-    public java.util.Timer countdown;
-    public int interval = 120;
+    private java.util.Timer countdown;
+    private int interval = 120;
 
     public GameView(String playerName) {
         // Set window size
@@ -111,7 +109,7 @@ public class GameView extends JPanel {
         addMouseListener(new MouseActionListener());
 
         // Setup timer
-        timer = new javax.swing.Timer(5, new TimeListener());
+        timer = new javax.swing.Timer(10, new TimeListener());
         timer.start();
     }
 
@@ -169,7 +167,7 @@ public class GameView extends JPanel {
                     }
                     JOptionPane.showMessageDialog(null, "Game Over\nThank you for playing!");
                     p.setScore(score);
-//                    ScoreController.saveScore(p);
+                    ScoreController.saveScore(p);
                     AppContainer.changePanel(new HighScoresView());
                 }
             }
@@ -355,7 +353,7 @@ public class GameView extends JPanel {
         }
     }
 
-    public static void main(String[] args) {
-        AppContainer.changePanel(new GameView(""));
-    }
+//    public static void main(String[] args) {
+//        AppContainer.changePanel(new GameView(""));
+//    }
 }

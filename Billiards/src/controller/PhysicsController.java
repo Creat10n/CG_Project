@@ -77,7 +77,7 @@ public class PhysicsController {
                 p2 = new Point((int) b1.getX() + 10, (int) b1.getY() + 10);
 
                 // If 2 balls collide, change their velocity directions
-                if (p1.distance(p2) < 20) {
+                if (p1.distance(p2) <= 20) {
                     handleCollision(b, b1);
                     return true;
                 }
@@ -87,35 +87,122 @@ public class PhysicsController {
     }
 
     public void handleCollision(Ball b1, Ball b2) {
-        double x, y, d;
-        y = b2.getY() - b1.getY();
-        x = b2.getX() - b1.getX();
 
-        // Squared distance of 2 balls
-        d = x * x + y * y;
+        // Distances to the collision point
+        double Dx1, Dx2, Dy1, Dy2;
 
-        double kii, kji, kij, kjj;
+        // Center points of each ball
+        double X1, X2, Y1, Y2;
 
-        // i is b1 
-        // j is b2
-        kji = (x * b1.getVx() + y * b1.getVy()) / d; // k of j due to i
-        kii = (x * b1.getVy() - y * b1.getVx()) / d; // k of i due to i
-        kij = (x * b2.getVx() + y * b2.getVy()) / d; // k of i due to j
-        kjj = (x * b2.getVy() - y * b2.getVx()) / d; // k of j due to j
+        // Real distances (collision overlap)
+        double DxR, DyR;
 
-        double x1, y1, x2, y2;
-        x1 = kij * x - kii * y;
-        y1 = kij * y + kii * x;
-        x2 = kji * x - kjj * y;
-        y2 = kji * y + kjj * x;
+        // Real distance between ball centers
+        double distance;
 
-        // Set velocity of b1
-        b1.setVy(y1);
-        b1.setVx(x1);
+        // Ideal distances (no overlap)
+        double Dx, Dy;
 
-        // Set velocity of b2
-        b2.setVy(y2);
-        b2.setVx(x2);
+        // Straight and perpendicular velocities to collision
+        double Vp1, Vp2, Vs1, Vs2;
+
+        // New straight velocites during calculations
+        double newVs1, newVs2;
+
+        // Center = position + radius
+        X1 = b1.getX() + 10;
+        Y1 = b1.getY() + 10;
+        X2 = b2.getX() + 10;
+        Y2 = b2.getY() + 10;
+//        System.out.println(X1);
+//        System.out.println(Y1);
+//        System.out.println(X2);
+//        System.out.println(Y2);
+
+        // Difference in x and y between 2 balls
+        DxR = (X2 - X1);
+        DyR = (Y2 - Y1);
+//        System.out.println(DxR);
+//        System.out.println(DyR);
+
+        // Distance between 2 balls
+        distance = Math.sqrt(DxR * DxR + DyR * DyR);
+//        System.out.println(distance);
+
+        // Change X and Y coordinates to get a perfect collision which is 20
+        Dx = 20 * DxR / distance;
+        Dy = 20 * DyR / distance;
+//        System.out.println(Dx);
+//        System.out.println(Dy);
+
+        X2 = (X2 + (Dx - DxR));
+        Y2 = (Y2 + (Dy - DyR));
+        b2.setX(X2 - 10);
+        b2.setY(Y2 - 10);
+//        System.out.println(X2);
+//        System.out.println(Y2);
+//        System.out.println(b2.getX());
+//        System.out.println(b2.getY());
+
+        // Find the x and y distances from the centers of each ball to the collision point
+        Dx1 = 0.5 * (X2 - X1);
+        Dx2 = 0.5 * (X2 - X1);
+
+        Dy1 = 0.5 * (Y2 - Y1);
+        Dy2 = 0.5 * (Y2 - Y1);
+
+        // Calculate the velocity components of each ball parallel to the collision and perpendicular to it
+        Vs1 = paVelocity(b1.getVx(), b1.getVy(), Dx1, Dy1, 10);
+        Vp1 = peVelocity(b1.getVx(), b1.getVy(), Dx1, Dy1, 10);
+//        System.out.println(Vs1);
+//        System.out.println(Vp1);
+
+        Vs2 = paVelocity(b2.getVx(), b2.getVy(), Dx2, Dy2, 10);
+        Vp2 = peVelocity(b2.getVx(), b2.getVy(), Dx2, Dy2, 10);
+//        System.out.println(Vs2);
+//        System.out.println(Vp2);
+
+        // Find new parallel velocities for each ball
+        newVs1 = collisionVelocity(Vs1, Vs2, 1, 1);
+        newVs2 = collisionVelocity(Vs2, Vs1, 1, 1);
+//        System.out.println(newVs1);
+//        System.out.println(newVs2);
+
+        // Find new X and Y velocities for each ball using the new parallel velocity and the perpendicular velocity 
+        b1.setVx(xVelocity(newVs1, Vp1, Dx1, Dy1, 10));
+        b1.setVy(yVelocity(newVs1, Vp1, Dx1, Dy1, 10));
+//        System.out.println(b1.getVx());
+//        System.out.println(b1.getVy());
+
+        b2.setVx(xVelocity(newVs2, Vp2, Dx2, Dy2, 10));
+        b2.setVy(yVelocity(newVs2, Vp2, Dx2, Dy2, 10));
+//        System.out.println(b2.getVx());
+//        System.out.println(b2.getVy());
+    }
+
+    // Velocity parallel to the collision
+    public double paVelocity(double Vx, double Vy, double Dx, double Dy, double R) {
+        return (Vx * Dx + Vy * Dy) / R;
+    }
+
+    // Velocity perpendicular to the collision
+    public double peVelocity(double Vx, double Vy, double Dx, double Dy, double R) {
+        return (Vy * Dx - Vx * Dy) / R;
+    }
+
+    // x velocity from paVelocity and peVelocity
+    public double xVelocity(double Vs, double Vp, double Dx, double Dy, double R) {
+        return (Vs * Dx - Vp * Dy) / R;
+    }
+
+    // y velocity from paVelocity and peVelocity
+    public double yVelocity(double Vs, double Vp, double Dx, double Dy, double R) {
+        return (Vs * Dy + Vp * Dx) / R;
+    }
+
+    // Returns velocity of a ball after collision
+    public double collisionVelocity(double V1, double V2, double m1, double m2) {
+        return (V1 * (m1 - m2) + V2 * (2 * m2)) / (m1 + m2);
     }
 
     public boolean decreaseVelocity(ArrayList<Ball> balls) {
@@ -149,17 +236,17 @@ public class PhysicsController {
         p3 = new Point((int) GameView.balls.get(2).getX() + 10, (int) GameView.balls.get(2).getY() + 10);
 
         // Check first ball collision
-        if (p1.distance(p2) < 20) {
+        if (p1.distance(p2) <= 20) {
             first = true;
-            if (p1.distance(p3) < 20) {
+            if (p1.distance(p3) <= 20) {
                 second = true;
             }
         }
 
         // Check second ball collision
-        if (p1.distance(p3) < 20) {
+        if (p1.distance(p3) <= 20) {
             second = true;
-            if (p1.distance(p2) < 20) {
+            if (p1.distance(p2) <= 20) {
                 first = true;
             }
         }
