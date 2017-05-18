@@ -353,7 +353,7 @@ public class GameView extends JPanel {
         }
     }
 
-//    public static void main(String[] args) {
-//        AppContainer.changePanel(new GameView(""));
-//    }
+    public static void main(String[] args) {
+        AppContainer.changePanel(new GameView(""));
+    }
 }

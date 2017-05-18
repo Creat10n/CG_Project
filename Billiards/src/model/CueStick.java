@@ -46,15 +46,15 @@ public class CueStick {
         boolean isTurned = false;
         double delta = x + WIDTH - mouseX;
 
-        // Check if the mouse position is on the right of the cue ball
-        if ((x + WIDTH - mouseX) <= 0) {
+        // Check if the mouse position is on the left or the right of the cue ball
+        if ((x + 10 + WIDTH - mouseX) <= 0) {
             isTurned = true;
         }
 
         if (mouseY == y) {
             tan = 0;
         } else {
-            tan = (mouseY - (y + HEIGHT)) / delta;
+            tan = (mouseY - y) / delta;
         }
 
         if (!isTurned) {
