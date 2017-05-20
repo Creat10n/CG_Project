@@ -7,7 +7,10 @@ package controller;
 
 import model.Ball;
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import view.GameView;
 
 /**
@@ -17,10 +20,14 @@ import view.GameView;
 public class PhysicsController {
 
     private static PhysicsController physicsController;
+    private static SoundController soundController;
     public static boolean first = false;
     public static boolean second = false;
+    public static int edgeCollide = 0;
+    public static int checkFirst = 0;
 
     public PhysicsController() {
+        soundController = SoundController.getInstance();
     }
 
     public static PhysicsController getInstance() {
@@ -30,7 +37,7 @@ public class PhysicsController {
         return physicsController;
     }
 
-    public boolean moveBall(Ball b) {
+    public boolean moveBall(Ball b) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         // Check ball collision
         detectCollision(b);
 
@@ -43,11 +50,19 @@ public class PhysicsController {
             b.setX(b.getX() + b.getVx());
         }
         if (b.getX() + b.getVx() > 455) {
+            soundController.playCollision();
             b.setVx(-b.getVx());
+            if (b.equals(GameView.balls.get(0))) {
+                edgeCollide++;
+            }
         }
         if (b.getX() + b.getVx() < 30) {
+            soundController.playCollision();
             b.setVx(-b.getVx());
             b.setX(b.getX() + b.getVx());
+            if (b.equals(GameView.balls.get(0))) {
+                edgeCollide++;
+            }
         }
 
         // Check y coordinates of the pool table
@@ -56,16 +71,24 @@ public class PhysicsController {
             b.setY(b.getY() + b.getVy());
         }
         if (b.getY() + b.getVy() > 200) {
+            soundController.playCollision();
             b.setVy(-b.getVy());
+            if (b.equals(GameView.balls.get(0))) {
+                edgeCollide++;
+            }
         }
         if (b.getY() + b.getVy() < 30) {
+            soundController.playCollision();
             b.setVy(-b.getVy());
             b.setY(b.getY() + b.getVy());
+            if (b.equals(GameView.balls.get(0))) {
+                edgeCollide++;
+            }
         }
         return true;
     }
 
-    public boolean detectCollision(Ball b) {
+    public boolean detectCollision(Ball b) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         Point p1, p2;
         // Center point of the ball
         p1 = new Point((int) b.getX() + 10, (int) b.getY() + 10);
@@ -78,6 +101,7 @@ public class PhysicsController {
 
                 // If 2 balls collide, change their velocity directions
                 if (p1.distance(p2) <= 20) {
+                    soundController.playCollision();
                     handleCollision(b, b1);
                     return true;
                 }
@@ -235,19 +259,28 @@ public class PhysicsController {
         p2 = new Point((int) GameView.balls.get(1).getX() + 10, (int) GameView.balls.get(1).getY() + 10);
         p3 = new Point((int) GameView.balls.get(2).getX() + 10, (int) GameView.balls.get(2).getY() + 10);
 
-        // Check first ball collision
-        if (p1.distance(p2) <= 20) {
-            first = true;
+//        System.out.println(edgeCollide);
+        // Check which is the first ball that the cue ball collides
+        if (checkFirst == 0) {
+            if (p1.distance(p2) <= 20) {
+                checkFirst = 1;
+                first = true;
+            }
             if (p1.distance(p3) <= 20) {
+                checkFirst = 2;
                 second = true;
             }
         }
 
-        // Check second ball collision
-        if (p1.distance(p3) <= 20) {
-            second = true;
-            if (p1.distance(p2) <= 20) {
-                first = true;
+        if (checkFirst == 1) {
+            if ((p1.distance(p3) <= 20) && (edgeCollide > 2)) {
+                second = true;
+            }
+        } else if (checkFirst == 2) {
+            if (p1.distance(p3) <= 20) {
+                if ((p1.distance(p2) <= 20) && (edgeCollide > 2)) {
+                    first = true;
+                }
             }
         }
 

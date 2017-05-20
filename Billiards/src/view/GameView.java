@@ -248,14 +248,18 @@ public class GameView extends JPanel {
                 power = 0;
             }
 
-            if (check == 35) {
+            if (check == 50) {
                 physicsController.decreaseVelocity(GameView.balls);
                 check = 0;
             }
 
             for (Ball b : GameView.balls) {
                 // Control balls movements
-                physicsController.moveBall(b);
+                try {
+                    physicsController.moveBall(b);
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
 
                 // Calculate score and display
                 if (physicsController.calculateScore()) {
@@ -271,6 +275,8 @@ public class GameView extends JPanel {
                     // Reset first and second touch for calculating score in next strike
                     PhysicsController.first = false;
                     PhysicsController.second = false;
+                    PhysicsController.edgeCollide = 0;
+                    PhysicsController.checkFirst = 0;
                 }
                 if ((balls.get(0).getVx() == 0 && balls.get(0).getVy() == 0)
                         && (balls.get(1).getVx() == 0 && balls.get(1).getVy() == 0)
@@ -279,6 +285,8 @@ public class GameView extends JPanel {
                     // Reset first and second touch for calculating score in next strike
                     PhysicsController.first = false;
                     PhysicsController.second = false;
+                    PhysicsController.edgeCollide = 0;
+                    PhysicsController.checkFirst = 0;
                 }
             }
 
