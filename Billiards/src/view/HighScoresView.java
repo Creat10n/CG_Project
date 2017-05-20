@@ -50,6 +50,7 @@ public class HighScoresView extends JPanel {
     }
 
     private void initComponents() {
+        // Setup the title label
         jLabel = new JLabel("High Scores");
         jLabel.setFont(new Font("Lucida Calligraphy", 3, 36));
         jLabel.setForeground(new Color(255, 204, 51));
@@ -63,6 +64,7 @@ public class HighScoresView extends JPanel {
             }
         });
 
+        // Setup a text area for displaying highscores
         jTextArea = new JTextArea();
         jTextArea.setColumns(18);
         jTextArea.setEditable(false);

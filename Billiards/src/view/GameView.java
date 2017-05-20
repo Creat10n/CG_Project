@@ -155,19 +155,23 @@ public class GameView extends JPanel {
         jLabel7 = new JLabel("120");
         jLabel7.setFont(new Font("Times New Roman", 3, 16));
 
+        // Setup countdown timer
         countdown = new java.util.Timer();
         countdown.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 jLabel7.setText("" + setInterval());
+                // End of the game
                 if (interval == 0) {
                     for (Ball b : GameView.balls) {
                         b.setVx(0);
                         b.setVy(0);
                     }
                     JOptionPane.showMessageDialog(null, "Game Over\nThank you for playing!");
+                    // Save new player name and score
                     p.setScore(score);
                     ScoreController.saveScore(p);
+                    // Display highscore
                     AppContainer.changePanel(new HighScoresView());
                 }
             }
@@ -232,12 +236,13 @@ public class GameView extends JPanel {
     }
 
     private class TimeListener implements ActionListener {
-
+        // Old score for checking score calculation
         private int oldScore = score;
 
         @Override
         public void actionPerformed(ActionEvent e) {
             check++;
+            // Increase power by time when mouse dragged
             if (isMax) {
                 if (power != 100) {
                     power = power + 1;
@@ -248,6 +253,7 @@ public class GameView extends JPanel {
                 power = 0;
             }
 
+            // For each 0.5 second, decrease velocity of each moving ball
             if (check == 50) {
                 physicsController.decreaseVelocity(GameView.balls);
                 check = 0;
@@ -261,7 +267,7 @@ public class GameView extends JPanel {
                     System.out.println(ex);
                 }
 
-                // Calculate score and display
+                // Calculate and display score
                 if (physicsController.calculateScore()) {
                     score++;
                     jLabel4.setText(score + "");
@@ -272,7 +278,7 @@ public class GameView extends JPanel {
                         && ((balls.get(0).getVx() != 0 || balls.get(0).getVy() != 0)
                         || (balls.get(1).getVx() != 0 || balls.get(1).getVy() != 0)
                         || (balls.get(2).getVx() != 0 || balls.get(2).getVy() != 0))) {
-                    // Reset first and second touch for calculating score in next strike
+                    // Reset variables for calculating score in next strike
                     PhysicsController.first = false;
                     PhysicsController.second = false;
                     PhysicsController.edgeCollide = 0;
@@ -281,8 +287,9 @@ public class GameView extends JPanel {
                 if ((balls.get(0).getVx() == 0 && balls.get(0).getVy() == 0)
                         && (balls.get(1).getVx() == 0 && balls.get(1).getVy() == 0)
                         && (balls.get(2).getVx() == 0 && balls.get(2).getVy() == 0)) {
+                    // End of round so set old score with the new current score for further checking
                     oldScore = score;
-                    // Reset first and second touch for calculating score in next strike
+                    // Reset variables for calculating score in next strike
                     PhysicsController.first = false;
                     PhysicsController.second = false;
                     PhysicsController.edgeCollide = 0;
@@ -290,6 +297,7 @@ public class GameView extends JPanel {
                 }
             }
 
+            // Fill up the power bar with the current power
             if (isMax) {
                 powerBar.setValue(power);
             }
@@ -361,7 +369,7 @@ public class GameView extends JPanel {
         }
     }
 
-    public static void main(String[] args) {
-        AppContainer.changePanel(new GameView(""));
-    }
+//    public static void main(String[] args) {
+//        AppContainer.changePanel(new GameView(""));
+//    }
 }

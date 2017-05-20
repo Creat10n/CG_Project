@@ -14,6 +14,7 @@ import javax.swing.*;
  */
 public class ImageController {
 
+    // Handling background image
     public static Image getBackgroundImage() {
         return new ImageIcon("src/images/background.jpg").getImage();
     }
@@ -30,6 +31,7 @@ public class ImageController {
         return label;
     }
 
+    // Handling pool table image
     public static Image getTableImage() {
         return new ImageIcon("src/images/table.png").getImage();
     }

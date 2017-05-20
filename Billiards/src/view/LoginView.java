@@ -37,6 +37,7 @@ public class LoginView extends JPanel {
         jLabel.setFont(new Font("Times New Roman", 3, 15));
         jLabel.setForeground(new Color(255, 204, 51));
 
+        // Setup a text field for typing player name
         jTextField = new JTextField();
 
         jButton = new JButton("Play");

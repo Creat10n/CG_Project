@@ -5,12 +5,11 @@
  */
 package controller;
 
-import model.Ball;
+import model.*;
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import view.GameView;
 
 /**
@@ -37,7 +36,7 @@ public class PhysicsController {
         return physicsController;
     }
 
-    public boolean moveBall(Ball b) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+    public void moveBall(Ball b) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         // Check ball collision
         detectCollision(b);
 
@@ -49,6 +48,8 @@ public class PhysicsController {
         if (!(b.getX() + b.getVx() > 455)) {
             b.setX(b.getX() + b.getVx());
         }
+        
+        // Right edge collision
         if (b.getX() + b.getVx() > 455) {
             soundController.playCollision();
             b.setVx(-b.getVx());
@@ -56,6 +57,8 @@ public class PhysicsController {
                 edgeCollide++;
             }
         }
+        
+        // Left edge collision
         if (b.getX() + b.getVx() < 30) {
             soundController.playCollision();
             b.setVx(-b.getVx());
@@ -70,6 +73,8 @@ public class PhysicsController {
         if (!(b.getY() + b.getVy() > 200)) {
             b.setY(b.getY() + b.getVy());
         }
+        
+        // Bottom edge collision
         if (b.getY() + b.getVy() > 200) {
             soundController.playCollision();
             b.setVy(-b.getVy());
@@ -77,6 +82,8 @@ public class PhysicsController {
                 edgeCollide++;
             }
         }
+        
+        // Top edge collision
         if (b.getY() + b.getVy() < 30) {
             soundController.playCollision();
             b.setVy(-b.getVy());
@@ -85,7 +92,6 @@ public class PhysicsController {
                 edgeCollide++;
             }
         }
-        return true;
     }
 
     public boolean detectCollision(Ball b) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
@@ -192,7 +198,7 @@ public class PhysicsController {
 //        System.out.println(newVs1);
 //        System.out.println(newVs2);
 
-        // Find new X and Y velocities for each ball using the new parallel velocity and the perpendicular velocity 
+        // Find new X and Y velocities for each ball using the new parallel velocity and the unchanged perpendicular velocity 
         b1.setVx(xVelocity(newVs1, Vp1, Dx1, Dy1, 10));
         b1.setVy(yVelocity(newVs1, Vp1, Dx1, Dy1, 10));
 //        System.out.println(b1.getVx());
@@ -230,6 +236,7 @@ public class PhysicsController {
     }
 
     public boolean decreaseVelocity(ArrayList<Ball> balls) {
+        // Each ball will have its velocity decreased by 0.8/time
         for (Ball b : balls) {
             if (!(b.getVx() == 0 && b.getVy() == 0)) {
                 if (b.getVy() == 0) {
@@ -272,6 +279,8 @@ public class PhysicsController {
             }
         }
 
+        // After having the first ball-to-ball collision
+        // Check the number of edges collided and second ball-to-ball collision
         if (checkFirst == 1) {
             if ((p1.distance(p3) <= 20) && (edgeCollide > 2)) {
                 second = true;
@@ -284,7 +293,7 @@ public class PhysicsController {
             }
         }
 
-        // If the cue ball both collide with the other balls then return true
+        // If met all the requirements then return true
         if (first && second) {
             return true;
         }

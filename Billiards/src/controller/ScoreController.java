@@ -21,6 +21,7 @@ public class ScoreController {
     public ScoreController() {
     }
 
+    // Saving new player score after end of the game
     public static void saveScore(Player p) {
         Connection con = DatabaseController.getConnection();
         String query = "INSERT INTO highscore VALUES ('" + p.getName() + "', " + p.getScore() + ")";
@@ -32,6 +33,7 @@ public class ScoreController {
         }
     }
 
+    // Getting the top-5 highscores
     public static void highScores() {
         Connection con = DatabaseController.getConnection();
         String query = "SELECT name, score FROM highscore ORDER BY score DESC LIMIT 5";

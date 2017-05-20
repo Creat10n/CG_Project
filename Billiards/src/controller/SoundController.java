@@ -26,6 +26,7 @@ public class SoundController {
         return soundController;
     }
 
+    // Play sound when ball-to-ball collision or ball-to-edge collision
     public void playCollision() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         File f = new File("src/sounds/collision.wav");
         AudioInputStream ais = AudioSystem.getAudioInputStream(f);

@@ -15,27 +15,29 @@ public class DatabaseController {
 
     private static Connection con;
 
+    // Getting database connection
     public static Connection getConnection() {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost/carrom", "cgAdmin", "billiards");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         return conn;
     }
-    
+
+    // Addding new score into the database
     public void addHighScore(String name, String score) {
         try {
             String sql = "INSERT INTO HighScore(Name, Score) values(?,?)";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.setString(2, score);
-            
+
             pstmt.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 }
