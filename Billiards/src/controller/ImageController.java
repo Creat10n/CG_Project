@@ -6,6 +6,7 @@
 package controller;
 
 import java.awt.*;
+import java.net.URL;
 import javax.swing.*;
 
 /**
@@ -14,9 +15,12 @@ import javax.swing.*;
  */
 public class ImageController {
 
+    private static final URL backgroundURL = ImageController.class.getResource("images/background.jpg");
+    private static final URL tableURL = ImageController.class.getResource("images/table.png");
+    
     // Handling background image
     public static Image getBackgroundImage() {
-        return new ImageIcon("src/images/background.jpg").getImage();
+        return new ImageIcon(backgroundURL).getImage();
     }
 
     public static JLabel getBackgroundLabel() {
@@ -33,7 +37,7 @@ public class ImageController {
 
     // Handling pool table image
     public static Image getTableImage() {
-        return new ImageIcon("src/images/table.png").getImage();
+        return new ImageIcon(tableURL).getImage();
     }
 
     public static JLabel getTableLabel() {

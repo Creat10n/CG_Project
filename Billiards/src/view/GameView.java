@@ -8,6 +8,7 @@ package view;
 import controller.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.*;
@@ -70,7 +71,7 @@ public class GameView extends JPanel {
 
     // Enable mouse listener
     private boolean enabled = true;
-
+    
     public GameView(String playerName) {
         // Set window size
         setPreferredSize(new Dimension(500, 350));
@@ -332,7 +333,7 @@ public class GameView extends JPanel {
                     isMax = true;
 
                     // Repaint cue stick for each mouse drag
-                    stick.stickIcon = new ImageIcon("src/images/stick.png");
+                    stick.stickIcon = new ImageIcon(CueStick.stickURL);
                     repaint();
                 }
             }
@@ -351,7 +352,7 @@ public class GameView extends JPanel {
                     b1.setVy(vy);
 
                     // Remove cue stick after the mouse is released
-                    stick.stickIcon = new ImageIcon("src/images/.png");
+                    stick.stickIcon = new ImageIcon("");
                     repaint();
                 }
                 // Reset power 

@@ -6,6 +6,7 @@
 package controller;
 
 import java.io.*;
+import java.net.URL;
 import javax.sound.sampled.*;
 
 /**
@@ -15,6 +16,7 @@ import javax.sound.sampled.*;
 public class SoundController {
 
     private static SoundController soundController;
+    private final URL soundURL = SoundController.class.getResource("sounds/collision.wav");
 
     public SoundController() {
     }
@@ -28,8 +30,7 @@ public class SoundController {
 
     // Play sound when ball-to-ball collision or ball-to-edge collision
     public void playCollision() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        File f = new File("src/sounds/collision.wav");
-        AudioInputStream ais = AudioSystem.getAudioInputStream(f);
+        AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL);
         Clip clip = null;
         try {
             DataLine.Info info = new DataLine.Info(Clip.class, ais.getFormat());

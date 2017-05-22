@@ -6,6 +6,7 @@
 package model;
 
 import java.awt.*;
+import java.net.URL;
 import javax.swing.*;
 
 /**
@@ -19,6 +20,7 @@ public class Ball {
     private double vx, vy;
     private ImageIcon ballIcon;
     private boolean collide;
+    private URL ballURL;
 
     public Ball(int x, int y, int type) {
         setPoint(x, y);
@@ -34,7 +36,8 @@ public class Ball {
     }
 
     public void setType(int type) {
-        ballIcon = new ImageIcon("src/images/ball" + type + ".png");
+        ballURL = Ball.class.getResource("images/ball" + type + ".png");
+        ballIcon = new ImageIcon(ballURL);
     }
 
     public void paint(Graphics g) {

@@ -6,6 +6,7 @@
 package model;
 
 import java.awt.*;
+import java.net.URL;
 import javax.swing.*;
 import view.GameView;
 
@@ -20,9 +21,10 @@ public class CueStick {
     public double radian;
     private Graphics2D g;
     public ImageIcon stickIcon;
+    public static final URL stickURL = CueStick.class.getResource("images/stick.png");
 
     public CueStick() {
-        stickIcon = new ImageIcon("src/images/stick.png");
+        stickIcon = new ImageIcon(stickURL);
         // Position of the cue ball 
         // The cue stick will rotate around this point
         x = (int) GameView.balls.get(0).getX() + 10;
