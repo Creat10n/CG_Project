@@ -68,6 +68,9 @@ public class GameView extends JPanel {
     private java.util.Timer countdown;
     private int interval = 120;
 
+    // Enable mouse listener
+    private boolean enabled = true;
+
     public GameView(String playerName) {
         // Set window size
         setPreferredSize(new Dimension(500, 350));
@@ -168,11 +171,13 @@ public class GameView extends JPanel {
                         b.setVy(0);
                     }
                     JOptionPane.showMessageDialog(null, "Game Over\nThank you for playing!");
+                    // Disable mouse listener
+                    enabled = false;
                     // Save new player name and score
                     p.setScore(score);
                     ScoreController.saveScore(p);
                     // Display highscore
-                    AppContainer.changePanel(new HighScoresView());
+                    AppContainer.changePanel(new MenuView());
                 }
             }
         }, 1000, 1000);
@@ -236,6 +241,7 @@ public class GameView extends JPanel {
     }
 
     private class TimeListener implements ActionListener {
+
         // Old score for checking score calculation
         private int oldScore = score;
 
@@ -309,43 +315,49 @@ public class GameView extends JPanel {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            // Allow to drag the cue stick when all the balls stop moving
-            if ((balls.get(0).getVx() == 0 && balls.get(0).getVy() == 0)
-                    && (balls.get(1).getVx() == 0 && balls.get(1).getVy() == 0)
-                    && (balls.get(2).getVx() == 0 && balls.get(2).getVy() == 0)) {
+            // Allow to accept mouse input
+            if (enabled) {
+                // Allow to drag the cue stick when all the balls stop moving
+                if ((balls.get(0).getVx() == 0 && balls.get(0).getVy() == 0)
+                        && (balls.get(1).getVx() == 0 && balls.get(1).getVy() == 0)
+                        && (balls.get(2).getVx() == 0 && balls.get(2).getVy() == 0)) {
 
-                // Show power bar
-                powerBar.setVisible(true);
+                    // Show power bar
+                    powerBar.setVisible(true);
 
-                // Get the angle to calculate cue ball movement
-                stick.getRadian(e.getX(), e.getY());
+                    // Get the angle to calculate cue ball movement
+                    stick.getRadian(e.getX(), e.getY());
 
-                // Allow power bar to increase
-                isMax = true;
+                    // Allow power bar to increase
+                    isMax = true;
 
-                // Repaint cue stick for each mouse drag
-                stick.stickIcon = new ImageIcon("src/images/stick.png");
-                repaint();
+                    // Repaint cue stick for each mouse drag
+                    stick.stickIcon = new ImageIcon("src/images/stick.png");
+                    repaint();
+                }
             }
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            // Calculate x_velocity and y_velocity of the cue ball
-            if (isMax) {
-                double vx, vy;
-                vx = Math.cos(-stick.radian) * powerBar.getPercentComplete() * 10;
-                vy = Math.sin(-stick.radian) * powerBar.getPercentComplete() * 10;
-                b1.setVx(vx);
-                b1.setVy(vy);
+            // Allow to accept mouse input
+            if (enabled) {
+                // Calculate x_velocity and y_velocity of the cue ball
+                if (isMax) {
+                    double vx, vy;
+                    vx = Math.cos(-stick.radian) * powerBar.getPercentComplete() * 10;
+                    vy = Math.sin(-stick.radian) * powerBar.getPercentComplete() * 10;
+                    b1.setVx(vx);
+                    b1.setVy(vy);
 
-                // Remove cue stick after the mouse is released
-                stick.stickIcon = new ImageIcon("src/images/.png");
-                repaint();
+                    // Remove cue stick after the mouse is released
+                    stick.stickIcon = new ImageIcon("src/images/.png");
+                    repaint();
+                }
+                // Reset power 
+                isMax = false;
+                powerBar.setVisible(false);
             }
-            // Reset power 
-            isMax = false;
-            powerBar.setVisible(false);
         }
 
         @Override

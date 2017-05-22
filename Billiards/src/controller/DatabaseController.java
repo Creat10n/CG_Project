@@ -13,31 +13,15 @@ import java.sql.*;
  */
 public class DatabaseController {
 
-    private static Connection con;
-
     // Getting database connection
     public static Connection getConnection() {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/carrom", "cgAdmin", "billiards");
+            conn = DriverManager.getConnection("jdbc:mysql://db4free.net:3306/comgraph","comgraphadmin","billiards");
         } catch (Exception e) {
             System.out.println(e);
         }
         return conn;
-    }
-
-    // Addding new score into the database
-    public void addHighScore(String name, String score) {
-        try {
-            String sql = "INSERT INTO HighScore(Name, Score) values(?,?)";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setString(2, score);
-
-            pstmt.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

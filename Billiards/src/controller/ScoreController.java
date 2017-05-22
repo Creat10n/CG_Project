@@ -58,15 +58,7 @@ public class ScoreController {
         return names;
     }
 
-    public static void setNames(ArrayList<String> names) {
-        ScoreController.names = names;
-    }
-
     public static ArrayList<Integer> getScores() {
         return scores;
-    }
-
-    public static void setScores(ArrayList<Integer> scores) {
-        ScoreController.scores = scores;
     }
 }
