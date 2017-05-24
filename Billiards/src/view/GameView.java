@@ -261,10 +261,10 @@ public class GameView extends JPanel {
             }
 
             // For each 0.5 second, decrease velocity of each moving ball
-            if (check == 50) {
-                physicsController.decreaseVelocity(GameView.balls);
-                check = 0;
-            }
+//            if (check == 50) {
+//                physicsController.decreaseVelocity(GameView.balls);
+//                check = 0;
+//            }
 
             for (Ball b : GameView.balls) {
                 // Control balls movements

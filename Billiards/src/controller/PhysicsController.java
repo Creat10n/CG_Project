@@ -48,7 +48,7 @@ public class PhysicsController {
         if (!(b.getX() + b.getVx() > 455)) {
             b.setX(b.getX() + b.getVx());
         }
-        
+
         // Right edge collision
         if (b.getX() + b.getVx() > 455) {
             soundController.playCollision();
@@ -57,7 +57,7 @@ public class PhysicsController {
                 edgeCollide++;
             }
         }
-        
+
         // Left edge collision
         if (b.getX() + b.getVx() < 30) {
             soundController.playCollision();
@@ -73,7 +73,7 @@ public class PhysicsController {
         if (!(b.getY() + b.getVy() > 200)) {
             b.setY(b.getY() + b.getVy());
         }
-        
+
         // Bottom edge collision
         if (b.getY() + b.getVy() > 200) {
             soundController.playCollision();
@@ -82,7 +82,7 @@ public class PhysicsController {
                 edgeCollide++;
             }
         }
-        
+
         // Top edge collision
         if (b.getY() + b.getVy() < 30) {
             soundController.playCollision();
@@ -286,10 +286,8 @@ public class PhysicsController {
                 second = true;
             }
         } else if (checkFirst == 2) {
-            if (p1.distance(p3) <= 20) {
-                if ((p1.distance(p2) <= 20) && (edgeCollide > 2)) {
-                    first = true;
-                }
+            if ((p1.distance(p2) <= 20) && (edgeCollide > 2)) {
+                first = true;
             }
         }
 
