@@ -18,36 +18,54 @@ import javax.swing.GroupLayout.*;
 public class LoginView extends JPanel {
 
     // "Player name" label
-    private JLabel jLabel;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
 
     // Text field for input name
-    private JTextField jTextField;
+    private JTextField jTextField1;
+    private JTextField jTextField2;
 
     // "Play" button
     private JButton jButton;
 
-    public LoginView() {
-        initComponents();
+    public LoginView(int players) {
+        initComponents(players);
         // Add background
         add(ImageController.getBackgroundLabel());
     }
 
-    private void initComponents() {
-        jLabel = new JLabel("Player name: ");
-        jLabel.setFont(new Font("Times New Roman", 3, 15));
-        jLabel.setForeground(new Color(255, 204, 51));
+    private void initComponents(int players) {
+        jLabel1 = new JLabel("Player name : ");
+        jLabel1.setFont(new Font("Times New Roman", 3, 15));
+        jLabel1.setForeground(new Color(255, 204, 51));
+
+        jLabel2 = new JLabel("Player name: ");
+        jLabel2.setFont(new Font("Times New Roman", 3, 15));
+        jLabel2.setForeground(new Color(255, 204, 51));
 
         // Setup a text field for typing player name
-        jTextField = new JTextField();
+        jTextField1 = new JTextField();
+        jTextField2 = new JTextField();
 
-        jButton = new JButton("Play");
+        if (players == 1) {
+            jTextField2.setEditable(false);
+        }
+
+        jButton = new JButton("Next");
         // Go to GameView
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                System.out.println(jTextField.getText());
-                if (!jTextField.getText().equals("")) {
-                    AppContainer.changePanel(new GameView(jTextField.getText()));
+                if (players == 1) {
+                    if (!jTextField1.getText().equals("")) {
+                        AppContainer.changePanel(new GameModeView(jTextField1.getText(), jTextField2.getText()));
+                    }
+                } else if (players == 2) {
+                    if (!jTextField1.getText().equals("")
+                            && !jTextField2.getText().equals("")
+                            && !jTextField1.getText().equals(jTextField2.getText())) {
+                        AppContainer.changePanel(new GameModeView(jTextField1.getText(), jTextField2.getText()));
+                    }
                 }
             }
         });
@@ -60,12 +78,14 @@ public class LoginView extends JPanel {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(110, 110, 110)
                                 .addGroup(layout.createParallelGroup(Alignment.TRAILING)
-                                        .addComponent(jLabel))
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel2))
                                 .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                                        .addComponent(jTextField, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
-                                .addContainerGap(110, Short.MAX_VALUE))
+                                .addContainerGap(100, Short.MAX_VALUE))
         );
 
         layout.setVerticalGroup(
@@ -73,15 +93,19 @@ public class LoginView extends JPanel {
                         .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(100, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                                        .addComponent(jLabel)
-                                        .addComponent(jTextField, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
-                                .addGap(50, 50, 50)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+                                .addGap(25, 25, 25)
+                                .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+                                .addGap(25, 25, 25)
                                 .addComponent(jButton)
                                 .addGap(100, 100, 100))
         );
     }
 
 //    public static void main(String[] args) {
-//        AppContainer.changePanel(new LoginView());
+//        AppContainer.changePanel(new LoginView(1));
 //    }
 }

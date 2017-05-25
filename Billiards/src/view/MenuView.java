@@ -50,7 +50,7 @@ public class MenuView extends JPanel {
         jButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppContainer.changePanel(new LoginView());
+                AppContainer.changePanel(new PlayerModeView());
             }
         });
 

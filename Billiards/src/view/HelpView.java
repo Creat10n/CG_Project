@@ -41,12 +41,18 @@ public class HelpView extends JPanel {
 
         jTextArea = new JTextArea();
         jTextArea.setEditable(false);
+        jTextArea.setRows(20);
 
         // Contents of the game rules
-        String str = "\t- - - CARROM THREE CUSHION - - -\n\n\n";
-        str += "            OBJECT OF THE GAME\n\n\n";
-        str += "            The objective of this game is that players try to score as many points as\n they can under 120 seconds (2 minutes). ";
-        str += "In order to score points, players\n carrom their cue ball to hit a minimum of 3 cushions and collide with 2 other\n balls on the table in one strike.";
+        String str = "\t         - - - CARROM THREE CUSHION - - -       \n";
+        str += "\n            SIMPLE MODE\n";
+        str += " Player strikes the white cue ball to hit 1 of the 2 object balls and makes that\n object ball to collide with the other.";
+        str += "\n            THREE CUSHIONS MODE\n";
+        str += " Player carroms the cue ball to hit a minimum of 3 cushions and collide\n with 2 other balls on the table in one strike.";
+        str += "\n            1PLAYER MODE\n";
+        str += " Player try to score as many points as they can under 120 seconds.";
+        str += "\n            2PLAYER MODE\n";
+        str += " 2 players swap turn after each strike, scores 10 points first to win the match.";
         jTextArea.setText(str);
 
         // Layout
@@ -72,7 +78,7 @@ public class HelpView extends JPanel {
         );
     }
 
-//    public static void main(String[] args) {
-//        AppContainer.changePanel(new HelpView());
-//    }
+    public static void main(String[] args) {
+        AppContainer.changePanel(new HelpView());
+    }
 }

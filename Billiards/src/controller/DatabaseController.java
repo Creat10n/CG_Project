@@ -18,6 +18,7 @@ public class DatabaseController {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
+//            conn = DriverManager.getConnection("jdbc:mysql://db4free.net:3306/comgraph","comgraphadmin","billiards");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Billiards", "cgAdmin", "billiards");
         } catch (Exception e) {
             System.out.println(e);

@@ -258,7 +258,7 @@ public class PhysicsController {
         return true;
     }
 
-    public boolean calculateScore() {
+    public boolean calculateScore(int mode) {
         Point p1, p2, p3;
 
         // Center point of each balls
@@ -266,28 +266,123 @@ public class PhysicsController {
         p2 = new Point((int) GameView.balls.get(1).getX() + 10, (int) GameView.balls.get(1).getY() + 10);
         p3 = new Point((int) GameView.balls.get(2).getX() + 10, (int) GameView.balls.get(2).getY() + 10);
 
-//        System.out.println(edgeCollide);
-        // Check which is the first ball that the cue ball collides
-        if (checkFirst == 0) {
-            if (p1.distance(p2) <= 20) {
-                checkFirst = 1;
-                first = true;
+        // Score Calculation for 1Player mode
+        if (GameView.p2.getName().equals("")) {
+            // Check which is the first ball that the cue ball collides
+            if (checkFirst == 0) {
+                if (p1.distance(p2) <= 20) {
+                    checkFirst = 1;
+                    first = true;
+                }
+                if (p1.distance(p3) <= 20) {
+                    checkFirst = 2;
+                    second = true;
+                }
             }
-            if (p1.distance(p3) <= 20) {
-                checkFirst = 2;
-                second = true;
-            }
-        }
 
-        // After having the first ball-to-ball collision
-        // Check the number of edges collided and second ball-to-ball collision
-        if (checkFirst == 1) {
-            if ((p1.distance(p3) <= 20) && (edgeCollide > 2)) {
-                second = true;
+            // After having the first ball-to-ball collision
+            // Check the number of edges collided and second ball-to-ball collision
+            // Simple mode
+            if (mode == 1) {
+                if (checkFirst == 1) {
+                    if (p2.distance(p3) <= 20) {
+                        second = true;
+                    }
+                } else if (checkFirst == 2) {
+                    if (p3.distance(p2) <= 20) {
+                        first = true;
+                    }
+                }
+                // Three Cushions mode
+            } else if (mode == 2) {
+                if (checkFirst == 1) {
+                    if ((p1.distance(p3) <= 20) && (edgeCollide > 2)) {
+                        second = true;
+                    }
+                } else if (checkFirst == 2) {
+                    if ((p1.distance(p2) <= 20) && (edgeCollide > 2)) {
+                        first = true;
+                    }
+                }
             }
-        } else if (checkFirst == 2) {
-            if ((p1.distance(p2) <= 20) && (edgeCollide > 2)) {
-                first = true;
+            // Score Calculation for 2Player mode 
+        } else {
+            if (!GameView.turn) {
+                // Check which is the first ball that the 1st player's cue ball collides
+                if (checkFirst == 0) {
+                    if (p2.distance(p1) <= 20) {
+                        checkFirst = 1;
+                        first = true;
+                    }
+                    if (p2.distance(p3) <= 20) {
+                        checkFirst = 2;
+                        second = true;
+                    }
+                }
+
+                // After having the first ball-to-ball collision
+                // Check the number of edges collided and second ball-to-ball collision
+                // Simple mode
+                if (mode == 1) {
+                    if (checkFirst == 1) {
+                        if (p1.distance(p3) <= 20) {
+                            second = true;
+                        }
+                    } else if (checkFirst == 2) {
+                        if (p3.distance(p1) <= 20) {
+                            first = true;
+                        }
+                    }
+                    // Three Cushions mode
+                } else if (mode == 2) {
+                    if (checkFirst == 1) {
+                        if ((p2.distance(p3) <= 20) && (edgeCollide > 2)) {
+                            second = true;
+                        }
+                    } else if (checkFirst == 2) {
+                        if ((p2.distance(p1) <= 20) && (edgeCollide > 2)) {
+                            first = true;
+                        }
+                    }
+                }
+            } else {
+                // Check which is the first ball that the 2nd player's cue ball collides
+                if (checkFirst == 0) {
+                    if (p3.distance(p1) <= 20) {
+                        checkFirst = 1;
+                        first = true;
+                    }
+                    if (p3.distance(p2) <= 20) {
+                        checkFirst = 2;
+                        second = true;
+                    }
+                }
+
+                // After having the first ball-to-ball collision
+                // Check the number of edges collided and second ball-to-ball collision
+                // Simple mode
+                if (mode == 1) {
+                    if (checkFirst == 1) {
+                        if (p1.distance(p2) <= 20) {
+                            second = true;
+                        }
+                    } else if (checkFirst == 2) {
+                        if (p2.distance(p1) <= 20) {
+                            first = true;
+                        }
+                    }
+                    // Three Cushions mode
+                } else if (mode == 2) {
+                    if (checkFirst == 1) {
+                        if ((p3.distance(p2) <= 20) && (edgeCollide > 2)) {
+                            second = true;
+                        }
+                    } else if (checkFirst == 2) {
+                        if ((p3.distance(p1) <= 20) && (edgeCollide > 2)) {
+                            first = true;
+                        }
+                    }
+                }
             }
         }
 
